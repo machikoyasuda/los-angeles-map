@@ -90,14 +90,14 @@ You can check that it worked by running "git show" in your terminal. You should 
 
 ### Push
 
-So at this point your haiku changes are only in your local git repository. But the goal is to contribute your local work back to the main repository so everyone can appreciate it at http://maptimela.github.io/neighborhoods.
+So at this point your haiku changes are only in your local git repository. But the goal is to contribute your local work back to the main repository so everyone can appreciate it at machikoyasuda.github.io/los-angeles-map/.
 
 If you are using command line git, from your project directory run this:
 
 ```sh
-git push origin echo-park-lake-haiku
+git push origin head
 ```
-**Remember** to substitute in whatever your branch name was for "echo-park-lake-haiku"!
+
 
 If this worked you should be able to see your branch on github by going to: https://github.com/machikoyasuda/los-angeles-map/branches
 
