@@ -90,18 +90,15 @@ You can check that it worked by running "git show" in your terminal. You should 
 
 ### Push
 
-So at this point your haiku changes are only in your local git repository. But the goal is to contribute your local work back to the main repository so everyone can appreciate it at http://maptimela.github.io/neighborhoods.
+So at this point your haiku changes are only in your local git repository. But the goal is to contribute your local work back to the main repository so everyone can appreciate it at machikoyasuda.github.io/los-angeles-map/.
 
 If you are using command line git, from your project directory run this:
 
 ```sh
-git push origin echo-park-lake-haiku
+git push origin head
 ```
-**Remember** to substitute in whatever your branch name was for "echo-park-lake-haiku"!
 
-If this worked you should be able to see your branch on github by going to: https://github.com/machikoyasuda/los-angeles-map/branches
-
-### Pull request
+## Make a Pull Request
 
 What's a pull request?
 
@@ -115,4 +112,47 @@ Don't see it? Then likely there was an issue with the [push](#push) step. Try ag
 
 At this point, your pull request is waiting to be merged back into the main project. Try to find a nice reviewer for feedback on your haiku and it will get merged in no time!
 
-If you see an error about *merge conflicts*, ask for help!
+If you see an error about *merge conflicts*, ask for help or use the GitHub tool to resolve it.
+
+## Review a Pull Request
+
+Pull down the latest branches:
+
+```sh
+git pull
+```
+
+You should get something like this:
+
+```sh
+$ git pull
+remote: Counting objects: 12, done.
+remote: Compressing objects: 100% (12/12), done.
+remote: Total 12 (delta 8), reused 2 (delta 0), pack-reused 0
+Unpacking objects: 100% (12/12), done.
+From github.com:machikoyasuda/los-angeles-map
+ * [new branch]      5-kristinzinser-downtown-la -> origin/5-kristinzinser-downtown-la
+ * [new branch]      8-downtown-la-map           -> origin/8-downtown-la-map
+There is no tracking information for the current branch.
+```
+
+Check out the branch you want to test:
+
+```sh
+git checkout 5-kristinzinser-downtown-la
+```
+
+And you'll get a message like this:
+
+```sh
+Branch 5-kristinzinser-downtown-la set up to track remote branch 5-kristinzinser-downtown-la from origin.
+Switched to a new branch '5-kristinzinser-downtown-la'
+```
+
+Now go to your browser and check out the changes made: `localhost:8080` 
+
+Looks good to you? Then it's ready to Merge. Go to GitHub to approve and merge the PR.
+
+If this worked you should be able to see your branch on github by going to: https://github.com/machikoyasuda/los-angeles-map/branches
+
+
