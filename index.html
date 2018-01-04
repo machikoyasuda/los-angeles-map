@@ -99,7 +99,8 @@
                     neighborhoodName = neighborhood[0].feature.properties.name;
                     incrementHaikuCounts(neighborhoodName);
                   } else {
-                    console.log(point.getLatLng() + " falls outside of any known neighborhoods");
+                    neighborhoodName = "Outside of L.A."
+                    incrementHaikuCounts(neighborhoodName)
                   }
                 });
               }).addTo(map);
