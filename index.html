@@ -75,6 +75,10 @@
                 onEachFeature: onEachNeighborhood
               }).addTo(map);
 
+              // Add a Stamen watercolor layer for new effect
+              var stamenLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png', {
+                attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+              }).addTo(map);
 
               // Now we want to plot haikus on the map
               //
@@ -117,6 +121,27 @@
           });
           $('.haiku-counts').html( countItems );
         }
+
+        var map = new ol.Map({
+          layers: [
+            new ol.layer.Tile({
+              source: new ol.source.Stamen({
+                layer: 'watercolor'
+              })
+            }),
+            new ol.layer.Tile({
+              source: new ol.source.Stamen({
+                layer: 'terrain-labels'
+              })
+            })
+          ],
+          target: 'map',
+          view: new ol.View({
+            center: ol.proj.transform(
+                [-122.416667, 37.783333], 'EPSG:4326', 'EPSG:3857'),
+            zoom: 12
+          })
+        });
 
     </script>
 </head>
