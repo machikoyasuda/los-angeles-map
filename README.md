@@ -39,6 +39,8 @@ Then use `http-server` to start a local webserver:
 http-server
 ```
 
+You might have to install [http-server](https://www.npmjs.com/package/http-server) from npm.
+
 Now open a browser and go to `http://127.0.0.1:8080/`. You should see our  map. If not, or if you see some kind of error, there was a problem with setup somewhere. Let us know, and we'll help you figure it out!
 
 To quit the local webserver, in the terminal type CTRL+C.
