@@ -1,0 +1,134 @@
+<html>
+<head>
+    <title>Neighborhood Haikus</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src="http://code.jquery.com/jquery-latest.min.js " ></script>
+    <script src='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v2.2.3/mapbox.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <script src='leaflet-pip.min.js'></script>
+    <link rel="stylesheet" href="style.css" />
+
+    <script type="text/javascript">
+
+        var map, neighborhoods;
+
+        // We'll keep track of our counts per neighborhood here
+        var haikuCounts = {};
+
+        $(document).ready(function(){
+            L.mapbox.accessToken = 'pk.eyJ1IjoibWFwdGltZWxhb21hciIsImEiOiJjaWd3MWVxYzYwcnpzdmttNXF0YnMyNGNpIn0.j-U_d3YrKY3uXqmVXN2RWA';
+
+            // Build our map, center it on LA City Hall and set the Zoom to 11
+            map = L.mapbox.map('map', 'mapbox.streets').setView([34.0536, -118.2430], 11);;
+
+            // Now we want to draw some neighborhoods on the map!
+            //
+            // We snatched the neighborhood boundaries from the The LA Times
+            //
+            // First thing is to fetch the neighborhood geojson file which defines
+            // the shape and other attributes of the neighborhoods like the
+            // neighborhood's name.
+            $.getJSON('la-county-neighborhoods-current.geojson', function(contentsOfGeoJsonFile) {
+
+              // How to color the neighborhood outlines
+              var neighborhoodStyle = {
+                "color": "dodgerBlue",
+                "weight": 1,
+                "opacity": 0.6,
+                "fillOpacity": 0.1
+              };
+
+              // How to color the neighborhood outlines
+              // once you click on it
+              var highlightStyle = {
+                "color": "dodgerBlue",
+                "weight": 1,
+                "opacity": 0.6,
+                "fillOpacity": 0.4
+              };
+
+              // Define some behavior for the neighborhood drawn on the map
+              //
+              // "neighborhoodFeature" is the data from the geoJson file
+              // "neighborhoodLayer" is how that data will be presented on our map
+              function onEachNeighborhood(neighborhoodFeature, neighborhoodLayer) {
+                // Show the neighborhood's name when you click on it
+                neighborhoodLayer.bindPopup(neighborhoodFeature.properties.name);
+
+                // Highlight that neighborhood when you click on it
+                // using the styles above
+                neighborhoodLayer.on('click', function(event) {
+                  neighborhoodLayer.setStyle(highlightStyle);
+                });
+
+                // Unhighlight the neighborhood once the popup closes
+                neighborhoodLayer.on('popupclose', function(event) {
+                  neighborhoodLayer.setStyle(neighborhoodStyle);
+                });
+              }
+
+              // Add the fetched data to our map with the styles and
+              // behaviors we defined above.
+              neighborhoods = L.geoJson(contentsOfGeoJsonFile, {
+                "style": neighborhoodStyle,
+                onEachFeature: onEachNeighborhood
+              }).addTo(map);
+
+
+              // Now we want to plot haikus on the map
+              //
+              // Add a marker for each haiku in our haiku CSV
+              var pointsLayer = omnivore.csv('haikus.csv').on('ready', function() {
+
+                // Some things we want to do for each haiku marker
+                pointsLayer.eachLayer(function(point) {
+                  // Attach a popup to each marker with the haiku and a "by" line
+                  point.bindPopup(
+                    point.feature.properties.haiku + "<br /><br /> by <a target='_blank' href='http://github.com/"  + point.feature.properties.github + "' >" + point.feature.properties.github + "</a>"
+                  );
+
+                  // Figure out what neighborhood the point is in and tally up
+                  // the haiku count for that neighborhood
+                  var neighborhood = leafletPip.pointInLayer(point.getLatLng(), neighborhoods, true);
+                  if (neighborhood[0]) {
+                    neighborhoodName = neighborhood[0].feature.properties.name;
+                    incrementHaikuCounts(neighborhoodName);
+                  } else {
+                    console.log(point.getLatLng() + " falls outside of any known neighborhoods");
+                  }
+                });
+              }).addTo(map);
+            });
+
+        });
+
+        // Add's one to the haiku count for the given neighborhood name
+        // and re-renders the haiku count list.
+        function incrementHaikuCounts(neighborhoodName) {
+          if (haikuCounts[neighborhoodName]) {
+            haikuCounts[neighborhoodName] = haikuCounts[neighborhoodName] + 1;
+          } else {
+            haikuCounts[neighborhoodName] = 1;
+          }
+          countItems = '';
+          $.each(haikuCounts, function(name, count) {
+            countItems += "<li>" + name + ": " + count + "</li>";
+          });
+          $('.haiku-counts').html( countItems );
+        }
+
+    </script>
+</head>
+
+<body>
+    <div id="map">
+      <div class="overlay">
+        <h1 class="map-header">Neighborhood Haiku Counts</h1>
+        <ul class="haiku-counts"></ul>
+      </div>
+    </div>
+</body>
+
+</html>

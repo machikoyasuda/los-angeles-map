@@ -1,0 +1,28 @@
+#map {
+  height:100%;
+  width:100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.overlay {
+  z-index: 1;
+  right: 0;
+  position: absolute;
+  background: rgba(0, 0, 0, .5);
+  color: #eee;
+}
+
+.map-header {
+  margin-top: 0;
+  padding: 8px;
+  border-bottom: solid #eee 1px;
+}
+
+.haiku-counts {
+  padding-left: 1rem;
+  list-style: none;
+}
